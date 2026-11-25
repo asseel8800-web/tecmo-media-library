@@ -312,3 +312,49 @@ with tab_cats:
         add_cat_name = st.text_input("اسم التصنيف الجديد:", placeholder="اكتب اسم التصنيف...")
         if st.button("إضافة التصنيف"):
             if add_cat_name.strip():
+                if add_cat_name.strip() not in categories:
+                    categories.append(add_cat_name.strip())
+                    save_categories(categories)
+                    st.success(f"تمت إضافة: {add_cat_name.strip()}")
+                    st.rerun()
+                else:
+                    st.warning("هذا التصنيف موجود مسبقاً.")
+            else:
+                st.error("يرجى كتابة اسم التصنيف.")
+
+    with col_c2:
+        st.markdown("#### ✏️ تغيير اسم تصنيف")
+        cat_to_rename = st.selectbox("اختر التصنيف المراد تغييره:", categories, key="rename_select")
+        new_cat_label = st.text_input("الاسم الجديد للتصنيف:", placeholder="اكتب الاسم الجديد...")
+        if st.button("تحديث الاسم"):
+            if new_cat_label.strip():
+                updated_cats = [new_cat_label.strip() if c == cat_to_rename else c for c in categories]
+                save_categories(updated_cats)
+                for r in records:
+                    if r.get("category") == cat_to_rename:
+                        r["category"] = new_cat_label.strip()
+                save_media_db(records)
+                st.success(f"تم تغيير الاسم إلى: {new_cat_label.strip()}")
+                st.rerun()
+            else:
+                st.error("يرجى كتابة الاسم الجديد.")
+
+    with col_c3:
+        st.markdown("#### 🗑️ حذف تصنيف")
+        cat_to_delete = st.selectbox("اختر التصنيف المراد حذفه:", categories, key="delete_select")
+        if st.button("حذف التصنيف نهائياً"):
+            if len(categories) <= 1:
+                st.error("يجب بقاء تصنيف واحد على الأقل في المكتبة.")
+            else:
+                remaining_cats = [c for c in categories if c != cat_to_delete]
+                save_categories(remaining_cats)
+                fallback_cat = remaining_cats
+                for r in records:
+                    if r.get("category") == cat_to_delete:
+                        r["category"] = fallback_cat
+                save_media_db(records)
+                st.warning(f"تم حذف التصنيف ({cat_to_delete}) ونقل صوره إلى ({fallback_cat}).")
+                st.rerun()
+
+st.divider()
+st.markdown("<div style='text-align: center; color: #091e42; font-size: 13px; font-weight: 600;'>تطوير وتصميم: شركة تكمو وأسيل الأسمري | Developed & Designed by Tecmo & Aseel Al-Asmari © 2026</div>", unsafe_allow_html=True)
