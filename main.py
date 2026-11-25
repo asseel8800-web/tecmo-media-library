@@ -110,7 +110,6 @@ html, body, [class*="css"] { font-family: 'IBM Plex Sans Arabic', sans-serif; di
 
 st.markdown("""
 <div class="header-banner">
-    <div style="display:inline-block; background:linear-gradient(135deg, #003366, #0066cc); color:white; padding:6px 20px; border-radius:10px; font-weight:800; font-size:20px;">Tecmo | تكمو</div>
     <h1>🖼️ مكتبة تكمو المرئية المشتركة</h1>
     <p>منصة سحابية موحدة لجميع الأقسام لرفع وتصنيف وتصفح صور المشاريع والمصانع والفعاليات</p>
 </div>
